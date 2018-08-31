@@ -1,47 +1,35 @@
 package org.codingmatters.poom.pack;
 
-import io.flexio.services.support.api.Api;
-import org.codingmatters.rest.api.Processor;
 import com.fasterxml.jackson.core.JsonFactory;
-import io.flexio.services.tabular.api.PoomPackComposerHandlers;
-import io.flexio.services.tabular.service.PoomPackComposerProcessor;
+import org.codingmatters.poom.pack.api.PoomPackComposerHandlers;
+import org.codingmatters.poom.pack.handler.GetPackage;
+import org.codingmatters.poom.pack.handler.SavePackage;
+import org.codingmatters.poom.pack.service.PoomPackComposerProcessor;
+import org.codingmatters.rest.api.Processor;
 
-public class PoomPackComposerApi implements Api {
+
+public class PoomPackComposerApi {
 
     private final String name = "poom-pack-composer";
     private PoomPackComposerHandlers handlers;
     private PoomPackComposerProcessor processor;
 
-    public PoomPackComposerApi(){
+    public PoomPackComposerApi( String repositoryPath, String serviceUrl ) {
         this.handlers = new PoomPackComposerHandlers.Builder()
-                            .build();
-
-        this.processor = new PoomPackComposerProcessor(this.path(), new JsonFactory(), handlers);
+                .packagesGetHandler( new GetPackage( repositoryPath, serviceUrl ) )
+                .repositoryPostHandler( new SavePackage( repositoryPath ) )
+                .build();
+        this.processor = new PoomPackComposerProcessor( this.path(), new JsonFactory(), handlers );
     }
 
-    @Override
     public Processor processor() {
         return this.processor;
     }
 
-    @Override
-    public String docResource() {
-        return "poom-pack-composer.html";
-    }
 
-    @Override
     public String path() {
         return "/" + this.name;
     }
 
-    @Override
-    public String name() {
-        return this.name;
-    }
-
-    @Override
-    public String version() {
-        return "v2";
-    }
 }
 

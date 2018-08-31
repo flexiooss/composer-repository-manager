@@ -5,128 +5,38 @@ description: Flexio PoomPackComposer API
 baseUri: https://api.flexio.io/poom-pack-composer
 mediaType: application/json
 
-
-annotationTypes:
-   value-object-hint:
-      type: string[]
-   conforms-to:
-      type: string[]
-
-resourceTypes:
-   rfc7233PagedCollection:
-      usage: standard RFC 7233 paged collection
-      description: <<elementType>> collection.
-      get:
-         (conforms-to): [io.flexio.services.api.commons.api.support.AccountAndRangeRequest]
-         description: |
-            Pageable collection of <<elementType>>.
-
-            Paging is handled with the range header (according to [RFC 7233](https://tools.ietf.org/html/rfc7233)).
-         headers:
-            range:
-               type: string
-               required: false
-         responses:
-            200:
-                description: complete list of <<elementType>> or last elements of the list of <<elementType>>
-                headers:
-                    Content-Range: string
-                    Accept-Range: string
-                body: <<elementType>>[]
-            206:
-                description: partial list of <<elementType>>
-                headers:
-                    Content-Range: string
-                    Accept-Range: string
-                body: <<elementType>>[]
-            416:
-                description: the specified range is not acceptable (Error code is ILLEGAL_RANGE_SPEC).
-                headers:
-                    Content-Range: string
-                    Accept-Range: string
-                body: Error
-            404:
-                description: resource not found, see code.
-                body: Error
-            500:
-                description: UNEXPECTED_ERROR.
-                body: Error
-      post:
-         description: creation of a <<elementType>> acording to the <<elementTypeCreationData>> passed as body.
-         body: <<elementTypeCreationData>>
-         responses:
-            201:
-               description: a <<elementType>> resoure is created given the <<elementTypeCreationData>> provided. the created resource uri is returned.
-               headers:
-                 Location: string
-            400:
-                description: request is not acceptable. Code ILLEGAL_RESOURCE_CREATION.
-                body: Error
-            404:
-                description: resource not found, see code.
-                body: Error
-            500:
-                description: UNEXPECTED_ERROR.
-                body: Error
-
-   updatableRessource:
-      usage: a rousource that can bet updatable througth the PATCH method.
-      description: <<elementType>> ressource.
-      get:
-         description: The full <<elementType>> resource with <<resourceIdParam>> id.
-         responses:
-             200:
-                 description: a <<elementType>> with the given <<resourceIdParam>> is found and returned
-                 body: <<elementType>>
-             404:
-                 description: no <<elementType>> found with the given <<resourceIdParam>>. Code RESOURCE_NOT_FOUND.
-                 body: Error
-             500:
-                 description: UNEXPECTED_ERROR.
-                 body: Error
-      put:
-         body: <<elementType>>
-         description: updates the <<elementType>> with id <<resourceIdParam>> given the provided <<elementType>>
-         responses:
-             200:
-                 description: the <<elementType>> with id <<resourceIdParam>> update was successful
-                 body: <<elementType>>
-             400:
-                 description: ressource change is not acceptable. Code ILLEGAL_RESOURCE_CHANGE.
-                 body: Error
-             404:
-                 description: no <<elementType>> found with the given <<resourceIdParam>>. Code RESOURCE_NOT_FOUND.
-                 body: Error
-             500:
-                 description: UNEXPECTED_ERROR.
-                 body: Error
-      patch:
-         body: <<elementTypeChangeData>>
-         description: updates the <<elementType>> with id <<resourceIdParam>> given the provided <<elementTypeChangeData>>
-         responses:
-             200:
-                 description: the <<elementType>> with id <<resourceIdParam>> update was successful
-                 body: <<elementType>>
-             400:
-                 description: ressource change is not acceptable. Code ILLEGAL_RESOURCE_CHANGE.
-                 body: Error
-             404:
-                 description: no <<elementType>> found with the given <<resourceIdParam>>. Code RESOURCE_NOT_FOUND.
-                 body: Error
-             500:
-                 description: UNEXPECTED_ERROR.
-                 body: Error
+/packages:
+  displayName: Repository
+  post:
+    headers:
+      X-version: string
+      X-artifact-id: string
+      X-vendor: string
+    body: file
+    responses:
+      201:
+  /packages.json:
+    displayName: Packages
+    get:
+      responses:
+        200:
+         body: JsonPackage
 
 types:
-   Error:
+  JsonPackage:
     type: object
     properties:
-        token: string
-        code:
-            enum: [
-            ILLEGAL_RANGE_SPEC,
-            UNEXPECTED_ERROR,
-            RESOURCE_NOT_FOUND,
-            ILLEGAL_RESOURCE_CREATION, ILLEGAL_RESOURCE_CHANGE,
-            INVALID_ACCOUNT]
-        description: string
+      packages: object
+
+  Package:
+    type: object
+    properties:
+      name: string
+      version: string
+      dist: Dist
+
+  Dist:
+    type: object
+    properties:
+      type: string
+      url: string

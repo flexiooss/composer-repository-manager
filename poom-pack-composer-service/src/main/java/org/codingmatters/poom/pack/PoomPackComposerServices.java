@@ -1,35 +1,65 @@
 package org.codingmatters.poom.pack;
 
-import io.flexio.services.metrics.HealthCheckProcessor;
-import io.flexio.services.support.api.ApiService;
-import io.flexio.services.support.args.Arguments;
-import io.flexio.services.support.args.ArgumentsException;
-import org.codingmatters.value.objects.values.ObjectValue;
-
-import static org.codingmatters.poom.services.support.Env.SERVICE_HOST;
-import static org.codingmatters.poom.services.support.Env.SERVICE_PORT;
+import io.undertow.Undertow;
+import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.poom.services.support.Env;
+import org.codingmatters.rest.undertow.CdmHttpUndertowHandler;
 
 public class PoomPackComposerServices {
-    
-    public static void main(String[] args){
-        try{
-            ApiService service = fromArguments(Arguments.parse(args));
-            service.go();
-        } catch (ArgumentsException e) {
-            e.printStackTrace();
-            System.exit(1);
-        }
-        System.exit(0);
+
+    static private final CategorizedLogger log = CategorizedLogger.getLogger( PoomPackComposerServices.class );
+    private static final String REPOSITORY_PATH = "repository_path";
+    private final String host;
+    private final int port;
+    private final PoomPackComposerApi api;
+    private Undertow server;
+
+    public PoomPackComposerServices( PoomPackComposerApi api, int port, String host ) {
+        this.api = api;
+        this.port = port;
+        this.host = host;
     }
 
-    public static ApiService fromArguments( Arguments arguments ) throws ArgumentsException {
-        return new ApiService(
-                arguments.mandatoryString( SERVICE_HOST ),
-                arguments.mandatoryInteger( SERVICE_PORT ),
-                ()->{},
-                HealthCheckProcessor.defaultHealthProcessor( ObjectValue.builder()::build )
+
+    public static void main( String[] args ) {
+        String host = Env.mandatory( Env.SERVICE_HOST ).asString();
+        int port = Env.mandatory( Env.SERVICE_PORT ).asInteger();
+
+        PoomPackComposerServices service = new PoomPackComposerServices( api(), port, host );
+        service.start();
+
+        log.info( "poom-ci pipeline api service running" );
+        while( true ) {
+            try {
+                Thread.sleep( 1000 );
+            } catch( InterruptedException e ) {
+                break;
+            }
+        }
+        log.info( "poom-ci pipeline api service stopping..." );
+        service.stop();
+        log.info( "poom-ci pipeline api service stopped." );
+    }
+
+    private static PoomPackComposerApi api() {
+        return new PoomPackComposerApi(
+                Env.mandatory( REPOSITORY_PATH ).asString(),
+                Env.mandatory( Env.SERVICE_URL ).asString()
         );
     }
-    
+
+
+    public void start() {
+        this.server = Undertow.builder()
+                .addHttpListener( this.port, this.host )
+                .setHandler( new CdmHttpUndertowHandler( this.api.processor() ) )
+                .build();
+        this.server.start();
+    }
+
+    public void stop() {
+        this.server.stop();
+    }
+
 }
 

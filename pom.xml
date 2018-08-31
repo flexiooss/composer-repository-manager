@@ -5,9 +5,19 @@
 
     <groupId>org.codingmatters.poom.pack</groupId>
     <artifactId>poom-pack-composer</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
-    
-</project>
 
+    <properties>
+        <api.spec>${project.parent.artifactId}.raml</api.spec>
+    </properties>
+
+    <version>1.0.0-SNAPSHOT</version>
+
+    <modules>
+        <module>poom-pack-composer-api</module>
+        <module>poom-pack-composer-api-spec</module>
+        <module>poom-pack-composer-service</module>
+        <module>poom-pack-composer-client</module>
+    </modules>
+</project>

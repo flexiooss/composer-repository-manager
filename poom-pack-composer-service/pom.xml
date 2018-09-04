@@ -12,6 +12,11 @@
     <artifactId>poom-pack-composer-service</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
 
+    <properties>
+        <docker.image.namespace>${flexio.docker.namespace}</docker.image.namespace>
+        <service.class.name>org.codingmatters.poom.pack.PoomPackComposerServices</service.class.name>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -93,7 +98,7 @@
                         <configuration>
                             <destination-package>${project.parent.groupId}.service</destination-package>
                             <types-package>${project.parent.groupId}.api</types-package>
-                            <api-spec-resource>${api.spec}</api-spec-resource>
+                            <api-spec-resource>${project.parent.artifactId}.raml</api-spec-resource>
                         </configuration>
                     </execution>
                 </executions>
@@ -114,37 +119,6 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>uber</shadedClassifierName>
-                            <transformers>
-                                <transformer
-                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>io.flexio.services.resources.service.ResourcesService</mainClass>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

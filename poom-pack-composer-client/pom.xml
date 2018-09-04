@@ -48,7 +48,7 @@
                         </goals>
                         <configuration>
                             <destination-package>${project.parent.groupId}.client</destination-package>
-                            <api-spec-resource>${api.spec}</api-spec-resource>
+                            <api-spec-resource>${project.parent.artifactId}.raml</api-spec-resource>
                             <types-package>${project.parent.groupId}.api.types</types-package>
                             <api-package>${project.parent.groupId}.api</api-package>
                         </configuration>

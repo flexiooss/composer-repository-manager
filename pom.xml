@@ -3,16 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.codingmatters.poom</groupId>
+        <artifactId>poom-services-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
     <groupId>org.codingmatters.poom.pack</groupId>
     <artifactId>poom-pack-composer</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+
     <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
-
-    <properties>
-        <api.spec>${project.parent.artifactId}.raml</api.spec>
-    </properties>
-
-    <version>1.0.0-SNAPSHOT</version>
 
     <modules>
         <module>poom-pack-composer-api</module>
@@ -62,19 +64,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

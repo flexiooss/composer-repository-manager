@@ -35,13 +35,14 @@ public class GetPackage implements Function<PackagesGetRequest, PackagesGetRespo
                         if( versions != null ) {
                             ObjectValue.Builder composer = ObjectValue.builder();
                             for( File version : versions ) {
-                                String[] composerFile = version.list( ( dir, name )->name.equals( "composer.json" ) );
+                                String expectedName = packageName.getName() + "-" + version.getName() + ".zip";
+                                String[] composerFile = version.list( ( dir, name )->name.equals( expectedName ) );
                                 String versionName = version.getName();
                                 if( composerFile != null && composerFile.length == 1 ) {
                                     composer.property( "name", name->name.stringValue( packageFullName ) )
                                             .property( "version", packVersion->packVersion.stringValue( versionName ) )
                                             .property( "dist", name->name.objectValue( ObjectValue.builder()
-                                                    .property( "url", url->url.stringValue( serviceUrl + "/" + String.join( "/", packageFullName, versionName ) ) )
+                                                    .property( "url", url->url.stringValue( serviceUrl + "/" + String.join( "/", packageFullName, versionName, packageName.getName() + "-" + versionName + ".zip" ) ) )
                                                     .property( "type", type->type.stringValue( "zip" ) )
                                                     .build() ) );
 

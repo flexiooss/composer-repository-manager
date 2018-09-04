@@ -29,7 +29,7 @@ public class GetPackageTest {
                                         .property( "version", version->version.stringValue( "1.0" ) )
                                         .property( "dist", dist->dist.objectValue(
                                                 d->d
-                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/1.0" ) )
+                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/1.0/package-1-1.0.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
                         ) )
@@ -39,7 +39,7 @@ public class GetPackageTest {
                                         .property( "version", version->version.stringValue( "2.0-SNAPSHOT" ) )
                                         .property( "dist", dist->dist.objectValue(
                                                 d->d
-                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/2.0-SNAPSHOT" ) )
+                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/2.0-SNAPSHOT/package-1-2.0-SNAPSHOT.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
                                 )
@@ -52,7 +52,7 @@ public class GetPackageTest {
                                         .property( "version", version->version.stringValue( "1.0.0-SNAPSHOT" ) )
                                         .property( "dist", dist->dist.objectValue(
                                                 d->d
-                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-2/1.0.0-SNAPSHOT" ) )
+                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-2/1.0.0-SNAPSHOT/package-2-1.0.0-SNAPSHOT.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
                         ) )
@@ -64,7 +64,7 @@ public class GetPackageTest {
                                         .property( "version", version->version.stringValue( "1.0" ) )
                                         .property( "dist", dist->dist.objectValue(
                                                 d->d
-                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-2/package-1/1.0" ) )
+                                                        .property( "url", url->url.stringValue( "http://service:456/vendor-2/package-1/1.0/package-1-1.0.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
                         ) )

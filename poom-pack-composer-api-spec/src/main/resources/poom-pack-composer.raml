@@ -12,15 +12,41 @@ mediaType: application/json
       X-version: string
       X-artifact-id: string
       X-vendor: string
+      X-api-key: string
     body: file
     responses:
       201:
+        description: Artifact upload successful
+      403:
+        description: Forbidden (bad api key)
+      500:
+        description: Unexpected error
+        body: Error
   /packages.json:
     displayName: Packages
     get:
       responses:
         200:
          body: JsonPackage
+        404:
+          description: Artifact not found
+          body: Error
+
+/{vendor}/{packageName}/{version}/{fileName}:
+  displayName: Artifacts
+  uriParameters:
+    vendor: string
+    packageName: string
+    version: string
+    fileName: string
+  get:
+    responses:
+      200:
+        headers:
+          Content-Length: string
+        body: file
+      500:
+        body: Error
 
 types:
   JsonPackage:
@@ -40,3 +66,10 @@ types:
     properties:
       type: string
       url: string
+
+  Error:
+    type: object
+    properties:
+      code:
+        enum: [ UNEXPECTED_ERROR, ARTIFACT_NOT_FOUND ]
+      description: string

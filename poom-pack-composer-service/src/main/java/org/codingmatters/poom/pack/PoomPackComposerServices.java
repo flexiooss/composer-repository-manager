@@ -1,5 +1,6 @@
 package org.codingmatters.poom.pack;
 
+import io.undertow.Handlers;
 import io.undertow.Undertow;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 import org.codingmatters.poom.services.support.Env;
@@ -44,7 +45,8 @@ public class PoomPackComposerServices {
     private static PoomPackComposerApi api() {
         return new PoomPackComposerApi(
                 Env.mandatory( REPOSITORY_PATH ).asString(),
-                Env.mandatory( Env.SERVICE_URL ).asString()
+                Env.mandatory( Env.SERVICE_URL ).asString(),
+                Env.mandatory( "API_KEY" ).asString()
         );
     }
 
@@ -52,7 +54,7 @@ public class PoomPackComposerServices {
     public void start() {
         this.server = Undertow.builder()
                 .addHttpListener( this.port, this.host )
-                .setHandler( new CdmHttpUndertowHandler( this.api.processor() ) )
+                .setHandler( Handlers.path().addPrefixPath( api.path(), new CdmHttpUndertowHandler( this.api.processor() ) ) )
                 .build();
         this.server.start();
     }

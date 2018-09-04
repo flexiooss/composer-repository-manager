@@ -2,6 +2,7 @@ package org.codingmatters.poom.pack;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import org.codingmatters.poom.pack.api.PoomPackComposerHandlers;
+import org.codingmatters.poom.pack.handler.GetArtifact;
 import org.codingmatters.poom.pack.handler.GetPackage;
 import org.codingmatters.poom.pack.handler.SavePackage;
 import org.codingmatters.poom.pack.service.PoomPackComposerProcessor;
@@ -14,10 +15,11 @@ public class PoomPackComposerApi {
     private PoomPackComposerHandlers handlers;
     private PoomPackComposerProcessor processor;
 
-    public PoomPackComposerApi( String repositoryPath, String serviceUrl ) {
+    public PoomPackComposerApi( String repositoryPath, String serviceUrl, String api_key ) {
         this.handlers = new PoomPackComposerHandlers.Builder()
                 .packagesGetHandler( new GetPackage( repositoryPath, serviceUrl ) )
-                .repositoryPostHandler( new SavePackage( repositoryPath ) )
+                .repositoryPostHandler( new SavePackage( repositoryPath, api_key ) )
+                .artifactsGetHandler( new GetArtifact( repositoryPath ) )
                 .build();
         this.processor = new PoomPackComposerProcessor( this.path(), new JsonFactory(), handlers );
     }

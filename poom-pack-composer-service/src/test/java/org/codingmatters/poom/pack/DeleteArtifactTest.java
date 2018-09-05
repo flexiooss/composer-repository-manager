@@ -5,13 +5,10 @@ import org.codingmatters.poom.pack.api.RepositoryPostRequest;
 import org.codingmatters.poom.pack.handler.DeleteArtifact;
 import org.codingmatters.poom.pack.handler.SavePackage;
 import org.codingmatters.rest.api.types.File;
+import org.codingmatters.rest.io.Content;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -34,8 +31,8 @@ public class DeleteArtifactTest {
         deleteArtifact = new DeleteArtifact( temp.getRoot().getPath(), API_KEY );
         savePackage = new SavePackage( temp.getRoot().getPath(), API_KEY );
 
-        Path zipArchive = Paths.get( Thread.currentThread().getContextClassLoader().getResource( "flexio-tabular-php-client-1.0.0-SNAPSHOT.zip" ).getPath() );
-        byte[] content = Files.readAllBytes( zipArchive );
+        java.io.File zipArchive = new java.io.File( Thread.currentThread().getContextClassLoader().getResource( "flexio-tabular-php-client-1.0.0-SNAPSHOT.zip" ).getPath() );
+
 
         vendor = "flexio-services";
         artifactId = "flexio-tabular-php-client";
@@ -47,7 +44,7 @@ public class DeleteArtifactTest {
                         .xVersion( artifactVersion )
                         .xApiKey( API_KEY )
                         .payload( File.builder()
-                                .content( content )
+                                .content( Content.from( zipArchive ) )
                                 .contentType( "application/zip" )
                                 .build() )
                         .build()

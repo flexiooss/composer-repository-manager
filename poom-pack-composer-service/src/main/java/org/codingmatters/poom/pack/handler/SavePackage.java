@@ -2,6 +2,7 @@ package org.codingmatters.poom.pack.handler;
 
 import org.codingmatters.poom.pack.api.RepositoryPostRequest;
 import org.codingmatters.poom.pack.api.RepositoryPostResponse;
+import org.codingmatters.poom.pack.api.repositorypostresponse.Status201;
 import org.codingmatters.poom.pack.api.types.Error;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
 
@@ -41,21 +42,9 @@ public class SavePackage implements Function<RepositoryPostRequest, RepositoryPo
         File artifactDir = new File( artifactDirectory );
         if( artifactDir.exists() || artifactDir.mkdirs() ) {
             String targetFile = artifactDirectory + "/" + repositoryPostRequest.xArtifactId() + "-" + composerCompliantVersion + ".zip";
-            byte[] buffer = new byte[1024];
             try( FileOutputStream outputStream = new FileOutputStream( new File( targetFile ) ) ) {
-                outputStream.write( repositoryPostRequest.payload().content() );
-                /*
-                try( InputStream inputStream = repositoryPostRequest.payload().inputStream() ) {
-                    int read;
-                    while( (read = inputStream.read( buffer )) != -1 ) {
-                        log.info( "Write " + read + " bytes to " + targetFile );
-                        outputStream.write( buffer );
-                    }
-                }
-                */
-                outputStream.flush();
-                return RepositoryPostResponse.builder()
-                        .status201( status->status.build() ).build();
+                repositoryPostRequest.payload().content().to( outputStream );
+                return RepositoryPostResponse.builder().status201( Status201.Builder::build ).build();
             } catch( IOException e ) {
                 return RepositoryPostResponse.builder()
                         .status500( status->status.payload( err->err

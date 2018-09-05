@@ -4,11 +4,10 @@ import org.codingmatters.poom.pack.api.ArtifactsGetRequest;
 import org.codingmatters.poom.pack.api.ArtifactsGetResponse;
 import org.codingmatters.poom.pack.api.types.Error;
 import org.codingmatters.poom.services.logging.CategorizedLogger;
+import org.codingmatters.rest.io.Content;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.function.Function;
 
 public class GetArtifact implements Function<ArtifactsGetRequest, ArtifactsGetResponse> {
@@ -25,21 +24,22 @@ public class GetArtifact implements Function<ArtifactsGetRequest, ArtifactsGetRe
         try {
             String filePath = String.join( File.separator, repositoryPath, artifactsGetRequest.vendor(), artifactsGetRequest.packageName(), artifactsGetRequest.version(), artifactsGetRequest.fileName() );
             log.info( "Getting artifact: " + filePath );
-            if( !new File( filePath ).exists() ) {
+            File artifactFile = new File( filePath );
+            if( !artifactFile.exists() ) {
                 return ArtifactsGetResponse.builder()
                         .status404( status->status.build() )
                         .build();
             }
-            byte[] content = Files.readAllBytes( Paths.get( filePath ) );
+            Content content = Content.from( artifactFile );
             return ArtifactsGetResponse.builder()
                     .status200( status->status
-                            .contentLength( content.length + "" )
+                            .contentLength( content.length() + "" )
                             .payload( file->file
                                     .contentType( "application/zip" )
                                     .content( content )
                             ) )
                     .build();
-        } catch( IOException e ) {
+        } catch( Exception e ) {
             log.error( "Error while sending artifact:", e );
             return ArtifactsGetResponse.builder()
                     .status500( status->status

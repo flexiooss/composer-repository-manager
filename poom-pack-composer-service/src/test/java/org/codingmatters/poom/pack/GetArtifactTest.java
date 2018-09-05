@@ -48,7 +48,7 @@ public class GetArtifactTest {
         ).opt().status200().orElseThrow( ()->new AssertionError( "Should get 200 with existing artefact" ) );
 
         byte[] content = Files.readAllBytes( Paths.get( repositoryPath + "/vendor-1/package-1/1.0/package-1-1.0.zip" ) );
-        assertThat( response.payload().content(), CoreMatchers.is( content ) );
+        assertThat( response.payload().content().asBytes(), CoreMatchers.is( content ) );
     }
-    
+
 }

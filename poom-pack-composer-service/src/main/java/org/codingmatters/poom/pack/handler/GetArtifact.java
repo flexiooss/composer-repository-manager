@@ -25,6 +25,11 @@ public class GetArtifact implements Function<ArtifactsGetRequest, ArtifactsGetRe
         try {
             String filePath = String.join( File.separator, repositoryPath, artifactsGetRequest.vendor(), artifactsGetRequest.packageName(), artifactsGetRequest.version(), artifactsGetRequest.fileName() );
             log.info( "Getting artifact: " + filePath );
+            if( !new File( filePath ).exists() ) {
+                return ArtifactsGetResponse.builder()
+                        .status404( status->status.build() )
+                        .build();
+            }
             byte[] content = Files.readAllBytes( Paths.get( filePath ) );
             return ArtifactsGetResponse.builder()
                     .status200( status->status

@@ -49,7 +49,19 @@ mediaType: application/json
         description: not found
       500:
         body: Error
-
+  delete:
+    headers:
+      X-api-key: string
+    responses:
+      204:
+        description: deleted
+      403:
+        description: permission denied
+      404:
+        description: artifact not found
+      500:
+        description: unexpected error
+        body: Error
 types:
   JsonPackage:
     type: object

@@ -44,7 +44,13 @@ public class GetPackage implements Function<PackagesGetRequest, PackagesGetRespo
                                             .property( "dist", name->name.objectValue( ObjectValue.builder()
                                                     .property( "url", url->url.stringValue( serviceUrl + "/" + String.join( "/", packageFullName, versionName, packageName.getName() + "-" + versionName + ".zip" ) ) )
                                                     .property( "type", type->type.stringValue( "zip" ) )
-                                                    .build() ) );
+                                                    .build() ) )
+                                            .property( "autoload",autoload->autoload.objectValue(
+                                                    obj->obj.property( "psr-4", psr->psr.objectValue(
+                                                            ps->ps.property( "io\\", io->io.stringValue( "io/" ) )
+                                                    ) )
+                                            ) )
+                                    ;
 
                                 }
                                 vendorPackage.property( versionName, v->v.objectValue( composer.build() ) );

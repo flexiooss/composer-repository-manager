@@ -32,6 +32,11 @@ public class GetPackageTest {
                                                         .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/1.0/package-1-1.0.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
+                                        .property( "autoload", auto->auto.objectValue(
+                                                a->a.property( "psr-4", psr->psr.objectValue(
+                                                        p->p.property( "io\\", io->io.stringValue( "io/" ) )
+                                                ) )
+                                        ))
                         ) )
                         .property( "2.0-SNAPSHOT", v->v.objectValue(
                                 c->c
@@ -42,6 +47,11 @@ public class GetPackageTest {
                                                         .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-1/2.0-SNAPSHOT/package-1-2.0-SNAPSHOT.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
+                                        .property( "autoload", auto->auto.objectValue(
+                                                a->a.property( "psr-4", psr->psr.objectValue(
+                                                        p->p.property( "io\\", io->io.stringValue( "io/" ) )
+                                                ) )
+                                        ))
                                 )
                         )
                 ) )
@@ -55,6 +65,11 @@ public class GetPackageTest {
                                                         .property( "url", url->url.stringValue( "http://service:456/vendor-1/package-2/1.0.0-SNAPSHOT/package-2-1.0.0-SNAPSHOT.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
+                                        .property( "autoload", auto->auto.objectValue(
+                                                a->a.property( "psr-4", psr->psr.objectValue(
+                                                        p->p.property( "io\\", io->io.stringValue( "io/" ) )
+                                                ) )
+                                        ))
                         ) )
                 ) )
                 .property( "vendor-2/package-1", o->o.objectValue( v1->v1
@@ -67,6 +82,11 @@ public class GetPackageTest {
                                                         .property( "url", url->url.stringValue( "http://service:456/vendor-2/package-1/1.0/package-1-1.0.zip" ) )
                                                         .property( "type", type->type.stringValue( "zip" ) )
                                         ) )
+                                        .property( "autoload", auto->auto.objectValue(
+                                                a->a.property( "psr-4", psr->psr.objectValue(
+                                                        p->p.property( "io\\", io->io.stringValue( "io/" ) )
+                                                ) )
+                                        ))
                         ) )
                 ) )
                 .build();
